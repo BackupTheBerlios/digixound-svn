@@ -1,0 +1,89 @@
+########################################################################
+	The DigiXound Project
+	---------------------
+	uStream  0.1.0-pre0
+########################################################################
+This program is provided as it is. Use it at your own risk.
+See LICENSE for the license agreements
+########################################################################
+
+
+
+
+------------------------------------------------------------------------
+1)		WHAT'S THAT?
+------------------------------------------------------------------------
+The DigiXound Project aims to be a complete audio framework for 
+professional performers and developers.
+uStream is the streaming kernel of DigiXound, thinked to be lightweight,
+cross platform and derived from Danubio streaming architecture
+(http://www.danubio.org).
+
+
+
+------------------------------------------------------------------------
+2)		REQUIREMENTS
+------------------------------------------------------------------------
+- CMake >= 2.2.0;
+- other... ;-(
+
+
+
+------------------------------------------------------------------------
+3)		INSTALL
+------------------------------------------------------------------------
+To install you need to have CMake (http://www.cmake.org)
+version 2.2.0 or above installed in your system. 
+Then CD IN THE SOURCE DIRECTORY and depending of your OS:
+
+==> Unix command build:
+./configure
+make
+make install (as root or with proper rights)
+
+==> Unix interactive build:
+./bootstrap
+ccmake .
+make
+make install (as root or with proper rights)
+
+==> Win32 or Apple:
+>>not yet tested!<<
+You need also a "make"-like program (on Win32, nmake could be good).
+Try the CMake Gui program to select source directory and flags.
+The run CMake process. At the end you will be able to compile with
+the selected environment (MinGW, Visual Studio etc...).
+
+Finally there are some options you can change through configure script
+or CMake gui:
+
+PREFIX : the install prefix (configure with -DPREFIX=/new_prefix) 
+
+
+
+------------------------------------------------------------------------
+4)		AUTHORS & AGREEMENTS
+------------------------------------------------------------------------
+Be careful to know the license statement of this program (GPL version 2).
+Read the file "license" distributed with this package or visit 
+http://www.gnu.org for more informations.
+
+Authors & team developers of this code are:
+
+o)- Luis Serrano (luis AT kontrol-dj.com):
+	main coder & uStream designer
+
+o)- Dunstan Nesbit ():
+	project leader
+
+o)- Gianluca Romanin (aka J_Zar), (j_zar AT openjay.org):
+	developer
+
+Some nice code is included, forked and / or distributed here.
+You can find a list with original authors and licensing:
+
+o)- DANUBIO STREAMING ARCHITECTURE ( http://www.danubio.org ), 
+	by Michele Iacobellis (m.iacobellis@nexotech.it) 
+	published under GPL license (later releases are covered by
+	LGPL);
+

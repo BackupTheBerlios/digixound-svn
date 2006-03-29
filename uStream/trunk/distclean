@@ -1,0 +1,22 @@
+#!/bin/bash 
+
+PROJECT_DIRS=". uOsUtil/ uStream/"
+
+for DIR in $PROJECT_DIRS ; do
+	rm -f $DIR/*.o
+	rm -f $DIR/*.so
+	rm -f $DIR/*.a
+	rm -f $DIR/*.cmake  
+	rm -f $DIR/*.depends 
+	rm -f $DIR/Makefile 
+	rm -f $DIR/CMakeCache.txt
+	rm -f $DIR/*.log
+	rm -f $DIR/*.check_depends 
+	rm -f $DIR/*.check_cache
+	rm -f $DIR/*~ 
+	rm -f $DIR/config.h
+	rm -f $DIR/uStream.pc
+	rm -f $DIR/install_manifest.txt
+	rm -f -R $DIR/CMakeTmp
+	rm -f -R $DIR/CMakeFiles
+done

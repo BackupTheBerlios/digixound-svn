@@ -1,0 +1,20 @@
+#!/bin/bash 
+
+# Bootstrap session for Cmake is a first run of the Cmake
+# program to create basic script stuff. Cmake seems to fail
+# some commands the first time it is run cause missing
+# some script, so bootstrap has a reason to be.
+
+if [ -e CMakeCache.txt ];
+then
+	echo "Bootstrap not needed..." ;
+else
+	echo "Bootstrap session for Cmake... Wait please..." ;
+	if ( cmake . 2> /dev/null 1> /dev/null );
+	then
+		echo "Bootstrap finished..." ;
+	else
+		echo "Errors while booting scripts... Bootstrap failure." ;
+		exit ;
+	fi
+fi

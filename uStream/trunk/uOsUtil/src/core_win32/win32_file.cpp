@@ -1,0 +1,171 @@
+/*
+  DANUBIO STREAMING ARCHITECTURE Support Library
+  Copyright (C) 2000-2004 Michele Iacobellis (miacobellis@linuximpresa.it)
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+*/
+
+#include "win32_file.hpp"
+
+namespace uStreamLib {
+	Impl_File::Impl_File(void)
+		: _fd(INVALID_HANDLE_VALUE)
+	{
+                // Nothing to do.
+	}
+
+	Impl_File::~Impl_File(void)
+	{
+		closeFile();
+	}
+
+	int32 Impl_File::openFile(char* pathname, int32 mode)
+	{
+		DWORD sys_mode = 0;
+
+		// close previous open file
+		closeFile();
+
+		// check mode
+		if (mode == FileInputStream::FILE_MODE_READ)
+			sys_mode = GENERIC_READ;
+		if (mode == FileInputStream::FILE_MODE_WRITE)
+			sys_mode = GENERIC_WRITE;
+		if (mode == FileInputStream::FILE_MODE_RW)
+			sys_mode = GENERIC_READ | GENERIC_WRITE;
+		if (mode == FileInputStream::FILE_MODE_TRUNCATE)
+			sys_mode = GENERIC_READ | GENERIC_WRITE;
+
+		DWORD aux = FILE_SHARE_READ | FILE_SHARE_WRITE;
+		DWORD dis = 0;
+
+		if (mode == FileInputStream::FILE_MODE_WRITE)
+			dis = CREATE_NEW;
+		if (mode == FileInputStream::FILE_MODE_RW)
+			dis = OPEN_ALWAYS;
+		if (mode == FileInputStream::FILE_MODE_READ)
+			dis = OPEN_EXISTING;
+		if (mode == FileInputStream::FILE_MODE_TRUNCATE)
+			dis = TRUNCATE_EXISTING;
+
+		UOSUTIL_DOUT(("IMPL(openFile): opening %s\n", pathname));
+		UOSUTIL_DOUT(("IMPL(openFile): mode    %d\n", mode));
+
+		if (mode == FileInputStream::FILE_MODE_TRUNCATE) {
+			// open file
+			_fd = ::CreateFile(pathname, sys_mode, aux, NULL, dis,
+					FILE_ATTRIBUTE_NORMAL, NULL);
+			if (_fd == INVALID_HANDLE_VALUE) {
+				// change mode so that file is created
+				dis = CREATE_NEW;
+
+				// open file with new mode
+				_fd = ::CreateFile(pathname, sys_mode, aux, NULL, dis,
+						FILE_ATTRIBUTE_NORMAL, NULL);
+				if (_fd == INVALID_HANDLE_VALUE)
+					return FAILURE;
+			}
+		} else {
+			// open file
+			_fd = ::CreateFile(pathname, sys_mode, aux, NULL, dis,
+					FILE_ATTRIBUTE_NORMAL, NULL);
+			if (_fd == INVALID_HANDLE_VALUE)
+				return FAILURE;
+		}
+
+		// ok
+		return SUCCESS;
+	}
+
+	int32 Impl_File::closeFile(void)
+	{
+		if (_fd == INVALID_HANDLE_VALUE)
+			return SUCCESS;
+
+		::CloseHandle(_fd);
+
+		_fd = INVALID_HANDLE_VALUE;
+		return SUCCESS;
+	}
+
+	int32 Impl_File::readFile(void* data, uint32 size)
+	{
+		BOOL ret = 0;
+		DWORD rb = 0;
+
+		if (_fd == INVALID_HANDLE_VALUE)
+			return FAILURE;
+
+		ret = ::ReadFile(_fd, data, size, &rb, NULL);
+		if (!ret)
+			return FAILURE;
+
+		return (int32) rb;
+	}
+
+	int32 Impl_File::writeFile(void* data, uint32 size)
+	{
+		BOOL ret = 0;
+		DWORD wb = 0;
+
+		if (_fd == INVALID_HANDLE_VALUE)
+			return FAILURE;
+
+		ret = ::WriteFile(_fd, data, size, &wb, NULL);
+		if (!ret)
+			return FAILURE;
+
+		return (int32) wb;
+	}
+
+	int32 Impl_File::seek(int32 offset, int32 origin)
+	{
+		DWORD ret = 0;
+
+		if (_fd == INVALID_HANDLE_VALUE)
+			return FAILURE;
+
+		switch (origin) {
+		case FileInputStream::SEEK_ORIGIN_SET:
+			ret = ::SetFilePointer(_fd, offset, NULL, FILE_BEGIN);
+			break;
+		case FileInputStream::SEEK_ORIGIN_CUR:
+			ret = ::SetFilePointer(_fd, offset, NULL, FILE_CURRENT);
+			break;
+		case FileInputStream::SEEK_ORIGIN_END:
+			ret = ::SetFilePointer(_fd, offset, NULL, FILE_END);
+			break;
+		}
+
+		if (ret == 0xffffffff)
+			return FAILURE;
+		return (int32) ret;
+	}
+
+	int32 Impl_File::skip(int32 bytes)
+	{
+		DWORD ret = 0;
+
+		if (_fd == INVALID_HANDLE_VALUE)
+			return FAILURE;
+
+		ret = ::SetFilePointer(_fd, bytes, NULL, FILE_BEGIN);
+
+		if (ret == 0xffffffff)
+			return FAILURE;
+		return (int32) ret;
+	}
+}

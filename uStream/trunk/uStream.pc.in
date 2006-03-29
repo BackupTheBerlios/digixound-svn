@@ -1,0 +1,10 @@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include/uStream
+
+Name: uStream
+Description: The uStream kernel [DigiXound Project]
+Requires:
+Version: 0.1.0-pre0
+Libs: -L${libdir} -luStream
+Cflags: -I${includedir}

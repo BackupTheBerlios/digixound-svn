@@ -1,0 +1,8 @@
+#!/bin/bash 
+
+# Open Sound Engine, Copyright (c) 2004 Gianluca Romanin (aka J_Zar) 
+# Configure script for CMake unix-type interaction
+
+./bootstrap
+
+cmake . $@ ;

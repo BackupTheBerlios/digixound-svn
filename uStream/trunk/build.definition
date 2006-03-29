@@ -1,0 +1,44 @@
+ 
+# Generic ============================================
+
+#==> uStream version
+SET(_PKG_VERSION 0.1.0-pre0)
+
+#==> Verbose makefile
+SET(CMAKE_VERBOSE_MAKEFILE ON)
+
+#==> Package var
+SET(PACKAGE "uStream")
+
+#==> Package bugreport
+SET(PACKAGE_BUGREPORT "digixound_AT_kontrol-dj.com")
+
+#==> Package string
+SET(PACKAGE_STRING "uStream 0.1.0-pre0")
+
+#==> Package version
+SET(PACKAGE_VERSION "0.1.0-pre0")
+
+#==> Debug definition
+SET(DEBUG TRUE)
+
+#==> Options
+# OPTION(BUILD_X "Build the X option (default)" YES)
+
+
+# Unix ================================================
+IF (UNIX)
+	#==> Default install path
+	IF (NOT PREFIX)
+		SET(PREFIX /usr/local)
+	ENDIF (NOT PREFIX)
+	
+	#==> Default paths for headers
+	SET(GENERIC_HEADER_DIRS /usr/include /usr/local/include)
+	
+	#==> Default paths for libs
+	SET(GENERIC_LIB_DIRS /usr/lib /usr/local/lib /opt/lib)
+	
+	#==> Default paths for binaries
+	SET(GENERIC_BIN_DIRS /usr/bin /usr/sbin /usr/local/bin /bin /sbin)
+ENDIF (UNIX)
